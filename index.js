@@ -25,14 +25,19 @@ app.get('/api/hello', function (req, res) {
 });
 
 app.get('/api/whoami', (req, res) => {
-  const ua = useragent.parse(req.headers['user-agent']);
-  const language = req.headers['accept-language'].split(',')[0];
-  const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  try {
+    const ua = useragent.parse(req.headers['user-agent']);
+    const language = req.headers['accept-language'].split(',')[0];
+    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-  // Get software information
-  const software = ua.family;
+    // Get software information
+    const software = ua.family;
 
-  res.json({ ipaddress: ipAddress, language: language, software: software });
+    res.json({ ipaddress: ipAddress, language: language, software: software });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred processing the request.' });
+  }
 });
 
 // listen for requests :)
