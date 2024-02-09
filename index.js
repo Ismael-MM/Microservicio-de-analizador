@@ -24,21 +24,13 @@ app.get('/api/hello', function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
-app.get('/api/whoami', (req, res) => {
-  try {
-    const ua = useragent.parse(req.headers['user-agent']);
-    const language = req.headers['accept-language'].split(',')[0];
-    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
-    // Get software information
-    const software = ua.family;
-
-    res.json({ ipaddress: ipAddress, language: language, software: software });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occurred processing the request.' });
-  }
-});
+app.get("/api/whoami", function (req, res) {
+  const ip = req.ip;
+  // console.log(JSON.stringify(req.headers));
+  const language = req.headers['accept-language'];
+  const software = req.headers['user-agent'];
+  res.send({ip: ip, language: language, software: software});
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3000, function () {
