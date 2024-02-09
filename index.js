@@ -30,14 +30,9 @@ app.get('/api/whoami', (req, res) => {
   const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   // Get software information
-  request(`https://api.ipdata.co?api-key=${process.env.IPDATA_API_KEY}&format=1`, { json: true }, (err, ipRes, ipBody) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error getting software information' });
-    }
+  const software = ua.family;
 
-    const software = ipBody.software;
-    res.json({ ipaddress: ipAddress, language: language, software: software });
-  });
+  res.json({ ipaddress: ipAddress, language: language, software: software });
 });
 
 // listen for requests :)
